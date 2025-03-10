@@ -1,20 +1,21 @@
 function solution(progresses, speeds) {
     var answer = [];
-    let [day, completed] = [1, 0];
-    let temp = 0;
-    while (completed !== progresses.length) {
-        for (let i = completed; i < progresses.length; i++) {
-            progresses[i] += speeds[i];
-            if (i === completed && progresses[i] >= 100) {
-                temp++;
-                completed++;
-            }
-            
-            if (i === progresses.length - 1 && temp !== 0) {
-                answer.push(temp);
-                temp = 0;
-            }
+    const n = progresses.length;
+    const daysLeft = progresses.map((progress, index) => Math.ceil((100 - progress) / speeds[index]));
+    
+    let count = 0;
+    let maxDay = daysLeft[0];
+    
+    for (let i = 0; i < n; i++) {
+        if (daysLeft[i] <= maxDay) {
+            count++;
+        } else {
+            answer.push(count);
+            count = 1;
+            maxDay = daysLeft[i];
         }
     }
+    
+    answer.push(count);
     return answer;
 }
