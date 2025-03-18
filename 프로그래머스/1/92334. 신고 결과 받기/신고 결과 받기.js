@@ -1,26 +1,27 @@
 function solution(id_list, report, k) {
-    var answer = [];
-    const member = {};
-    id_list.forEach(el => member[el] = []);
+    const reportedUser = {}; // 신고당한 유저
+    const count = {}; // 처리 결과 메일을 받은 유저
     
-    const reportedUser = {};
-    id_list.forEach(el => reportedUser[el] = 0);
-    report.forEach(el => {
-        const [reporter, reported] = el.split(" ");
-        if (!member[reporter].includes(reported)) {
-            member[reporter].push(reported);
-            reportedUser[reported]++;
+    for (const r of report) {
+        const [userId, reportedId] = r.split(" ");
+        if (reportedUser[reportedId] === undefined) {
+            reportedUser[reportedId] = new Set();
         }
-    });
-    
-    for (const id of id_list) {
-        let count = 0;
-        member[id].forEach(el => {
-            if (reportedUser[el] >= k) {
-                count++;
-            }
-        });
-        answer.push(count);
+        reportedUser[reportedId].add(userId); // 신고한 사람의 아이디를 집합에 담음
     }
+    
+    for (const reportedId of Object.keys(reportedUser)) {
+        if (reportedUser[reportedId].size >= k) {
+            for (const uid of reportedUser[reportedId]) {
+                count[uid] = (count[uid] || 0) + 1
+            }
+        }
+    }
+    
+    const answer = [];
+    for (const id of id_list) {
+        answer.push(count[id] || 0);
+    }
+    
     return answer;
 }
