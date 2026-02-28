@@ -2,21 +2,24 @@ const fs = require("fs");
 const [n, m] = fs.readFileSync("/dev/stdin").toString().trim().split(" ").map(Number);
 
 const numbers = new Array(n).fill(0).map((_, index) => index + 1);
+const visited = new Array(n).fill(false);
+const selected = [];
 
-const getCombi = (selected, remain, count) => {
-    const combis = [];
-    if (count === 1) {
-        remain.forEach((num) => combis.push([...selected, num].join(" ")));
-        return combis;
+const answer = [];
+const dfs = (arr, depth) => {
+    if (depth === m) {
+        answer.push(selected.join(" "));
+        return;
     }
-    
-    for (const num of remain) {
-        const newSelected = [...selected, num];
-        const newRemain = remain.filter(el => num !== el);
-        const newCombis = getCombi(newSelected, newRemain, count - 1);
-        combis.push(...newCombis);
+    for (let i = 1; i <= arr.length; i++) {
+        if (visited[i]) continue;
+        selected.push(i);
+        visited[i] = true;
+        dfs(arr, depth + 1);
+        selected.pop();
+        visited[i] = false;
     }
-    return combis;
 }
 
-console.log(getCombi([], numbers, m).join("\n"));
+dfs(numbers, 0);
+console.log(answer.join("\n"));
