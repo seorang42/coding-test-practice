@@ -13,20 +13,19 @@ const sorted = [...input.slice(1)].sort((a, b) => {
     } else return 0;
 });
 
-let [num, g, s, b] = sorted[0];
-input[num].push(1);
-let [rank, same] = [1, 0];
+let [g, s, b] = [-1, -1, -1];
+let [rank, same] = [0, 0];
 
-for (let i = 1; i < sorted.length; i++) {
+for (let i = 0; i < sorted.length; i++) {
     const [currNum, currG, currS, currB] = sorted[i];
     if (g === currG && s === currS && b === currB) {
         same++;
-        input[i + 1].push(rank);
+        input[currNum].push(rank);
     } else {
         [g, s, b] = [currG, currS, currB];
         rank += same + 1;
         same = 0;
-        input[i + 1].push(rank);
+        input[currNum].push(rank);
     }
 }
 
