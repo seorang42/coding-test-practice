@@ -6,10 +6,10 @@ const roads = input[1].split(" ").map(Number);
 const costs = input[2].split(" ").map(Number);
 
 let min = Infinity;
-let answer = 0;
+let answer = 0n;
 for (let i = 0; i < roads.length; i++) {
     min = Math.min(min, costs[i]);
-    answer += min * roads[i];
+    answer += BigInt(min) * BigInt(roads[i]);
 }
 
-console.log(answer);
+console.log(answer.toString());
