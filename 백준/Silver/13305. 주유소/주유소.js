@@ -1,11 +1,15 @@
 const fs = require("fs");
 const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
-const [n, distances, costs] = [Number(input[0]), input[1].split(" ").map(BigInt), input[2].split(" ").map(BigInt)];
 
-let [cost, minCost] = [0n, Infinity];
-for (let i = 0; i < distances.length; i++) {
-    if (costs[i] < minCost) minCost = costs[i];
-    cost += distances[i] * minCost;
+const n = Number(input[0]);
+const roads = input[1].split(" ").map(Number);
+const costs = input[2].split(" ").map(Number);
+
+let min = Infinity;
+let answer = 0;
+for (let i = 0; i < roads.length; i++) {
+    min = Math.min(min, costs[i]);
+    answer += min * roads[i];
 }
 
-console.log(cost.toString());
+console.log(answer);
