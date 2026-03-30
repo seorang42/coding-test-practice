@@ -1,17 +1,32 @@
 const fs = require("fs");
 const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
-const [n, cities, limit] = [Number(input[0]), input[1].split(" ").map(Number), Number(input[2])];
 
-let [min, max] = [1, Math.max(...cities)]
+const n = Number(input[0]);
+const budgets = input[1].split(" ").map(Number);
+const limit = Number(input[2]);
 
-while (min <= max) {
-    const mid = parseInt((min + max) / 2);
-    const total = cities.reduce((acc, cur) => acc + Math.min(cur, mid), 0);
-    if (total <= limit) {
-        min = mid + 1;
-    } else {
-        max = mid - 1;
+function parametric() {
+    let answer = 0;
+    let left = 0;
+    let right = Math.max(...budgets);
+    
+    while (left <= right) {
+        const mid = Math.floor((left + right) / 2);
+        
+        let sum = 0;
+        for (const budget of budgets) {
+            sum += Math.min(budget, mid);
+        }
+        
+        if (sum <= limit) {
+            answer = mid;
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
     }
+    
+    return answer;
 }
 
-console.log(max);
+console.log(parametric());
