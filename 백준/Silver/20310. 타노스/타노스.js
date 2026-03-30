@@ -1,40 +1,27 @@
 const fs = require("fs");
 const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
 
-const s = input[0];
-
-let [total0, total1, remain0, remain1, usable0] = [0, 0, 0, 0, 0];
-for (let i = 0; i < s.length; i++) {
-    if (s[i] === "0") total0++;
+const s = input[0].split("");
+let [total0, total1] = [0, 0]
+for (const letter of s) {
+    if (letter === "0") total0++;
     else total1++;
 }
-[remain0, remain1] = [total0 / 2, total1 / 2];
 
-let answer = "";
-for (let i = 0; i < s.length; i++) {
+let [remain0, remain1] = [total0 / 2, total1 / 2];
+
+for (let i = s.length - 1; i >= 0 && remain0 > 0; i--) {
     if (s[i] === "0") {
-        usable0++;
-    } else {
-        if (total1 > remain1) {
-            total1--;
-        } else {
-            while (remain0 > 0 && usable0 > 0) {
-                answer += "0";
-                remain0--;
-                usable0--;
-            }
-            answer += "1";
-            total1--;
-            remain1--;
-        }
+        remain0--;
+        s[i] = "";
     }
 }
 
-if (remain0 > 0) {
-    answer += "0".repeat(remain0);
-}
-if (remain1 > 0) {
-    answer += "1".repeat(remain1);
+for (let i = 0; i < s.length && remain1 > 0; i++) {
+    if (s[i] === "1") {
+        remain1--;
+        s[i] = "";
+    }
 }
 
-console.log(answer);
+console.log(s.join(""));
